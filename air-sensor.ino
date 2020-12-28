@@ -5,19 +5,14 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <Adafruit_Sensor.h>
-//#include <Adafruit_SSD1306.h>
 #include <Adafruit_AM2320.h>
 #include "AirGradient.h"
-//#include <Adafruit_Sensor.h>
 #include <DHT.h>
 #include <SSD1306Wire.h>
 
 AirGradient ag = AirGradient();
 
 // OLED display
-//#define SSD1306_64_48
-//#define OLED_RESET 0
-//Adafruit_SSD1306 display(OLED_RESET);
 SSD1306Wire display(0x3c, SDA, SCL);
 
 // Set sensors that you do not use to false
@@ -59,15 +54,15 @@ int intervalSend = 5 * 60 * 1000;// 5 minutes
 
 // Narodmon.ru settings
 char apiUrl[30] = "http://narodmon.ru/json";
-char apiOwnerName[20] = "andchir";
+char apiOwnerName[20] = "username";
 char apiSensorName[20] = "AirSensor";
-char apiSensorLat[10] = "61.767171";
-char apiSensorLon[10] = "34.295808";
+char apiSensorLat[10] = "61.784807";
+char apiSensorLon[10] = "34.346085";
 char apiSensorAlt[5] = "135";
 
 // Shopker settings
-char shopkerApiUrl[45] = "http://185.26.121.40/api/ru/user_content/19";
-char shopkerApiKey[121] = "c5f3a652f67c5d31a5cd39ec287bd3ba36e1b7737dc9e26ae697c4d467c8638a1f1bd62906b00f4a1f83f1214fad20fe3fbe49d135f263c10d64b137";
+char shopkerApiUrl[45] = "http://your-domain.com/api/ru/user_content/19";
+char shopkerApiKey[121] = "xxxxxx";
 
 void setup(){
   Serial.begin(9600);
@@ -80,10 +75,7 @@ void setup(){
 
   display.init();
   display.flipScreenVertically();
-  //display.begin(SSD1306_SWITCHCAPVCC, 0x3c);
-  //display.display();
   delay(2000);
-  //display.clearDisplay();
   display.clear();
   
   showTextRectangle("Init", String(ESP.getChipId(), HEX), "", "", true);
@@ -110,18 +102,14 @@ void loop(){
   }
 
   if (buttonIsEnabled) {
-    //wakeDisplay(display);
     display.displayOn();
   } else {
-    //display.clearDisplay();
-    //sleepDisplay(display);
     display.clear();
     display.displayOff();
   }
   if (buttonPressedLoop == 8) {
     buttonIsEnabled = true;
     Serial.println("Reset WIFI settings");
-    //wakeDisplay(display);
     display.displayOn();
     showTextRectangle("RESET", "WIFI", "CONFIG", "", true);
     WiFi.disconnect();
@@ -261,22 +249,12 @@ void showTextRectangle(String ln1, String ln2, String ln3, String ln4, boolean s
   display.setTextAlignment(TEXT_ALIGN_LEFT);
   int fontSize;
   if (small) {
-    //fontSize = 1;
     fontSize = 10;
     display.setFont(ArialMT_Plain_10);
   } else {
-    //fontSize = 2;
     fontSize = 16;
     display.setFont(ArialMT_Plain_16);
   }
-  //display.setTextSize(fontSize);
-  //display.setTextColor(WHITE);
-  //display.setCursor(0,0);
-
-  //display.println(ln1);
-  //display.println(ln2);
-  //display.println(ln3);
-  //display.println(ln4);
 
   display.drawString(32, 16, ln1);
   display.drawString(32, 16 + fontSize, ln2);
@@ -311,11 +289,3 @@ void connectToWifi(){
     Serial.println("API user: " + String(apiOwnerName));
   }
 }
-
-//void sleepDisplay(Adafruit_SSD1306 display) {
-//  display.ssd1306_command(SSD1306_DISPLAYOFF);
-//}
-
-//void wakeDisplay(Adafruit_SSD1306 display) {
-//  display.ssd1306_command(SSD1306_DISPLAYON);
-//}
