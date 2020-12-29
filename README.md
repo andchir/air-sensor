@@ -1,6 +1,6 @@
 # Измерение качества воздуха
 
-За основу была взята эта прошивка: https://github.com/airgradienthq/arduino
+За основу была взята эта прошивка: https://github.com/airgradienthq/arduino  
 Для визуального подключения к сети Wi-fi используется библиотека https://github.com/tzapu/WiFiManager
 
 Контроллер Wemos D1 Mini ESP8266.
