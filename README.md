@@ -16,4 +16,7 @@
 В коде можно включить/выключить отправку данных на https://narodmon.ru/ или Shopker (https://habr.com/ru/post/535158/).
 Для отправки данных на narodmon в параметре ``char apiOwnerName[20] = "username";`` указать имя своего пользователя. GPS координаты прибора можно не указывать, а указать на сайте narodmon.
 
-
+![Фото #1](https://github.com/andchir/air-sensor/blob/main/photo/001.jpg?raw=true "Фото #1")
+![Фото #2](https://github.com/andchir/air-sensor/blob/main/photo/002.jpg?raw=true "Фото #2")
+![Фото #3](https://github.com/andchir/air-sensor/blob/main/photo/003.jpg?raw=true "Фото #3")
+![Фото #4](https://github.com/andchir/air-sensor/blob/main/photo/004.jpg?raw=true "Фото #4")
