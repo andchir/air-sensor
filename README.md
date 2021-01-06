@@ -16,6 +16,10 @@
 В коде можно включить/выключить отправку данных на https://narodmon.ru/ или Shopker (https://habr.com/ru/post/535158/).
 Для отправки данных на narodmon в параметре ``char apiOwnerName[20] = "username";`` указать имя своего пользователя. GPS координаты прибора можно не указывать, а указать на сайте narodmon.
 
+Программы:  
+Arduino IDE https://www.arduino.cc/en/software  
+Как добавить поддержку платы Wemos Di mini в Arduino IDE: https://gist.github.com/carljdp/e6a3f5a11edea63c2c14312b534f4e53#file-d1-mini-esp8266-md
+
 ![Фото #1](https://github.com/andchir/air-sensor/blob/main/photo/001.jpg?raw=true "Фото #1")
 ![Фото #2](https://github.com/andchir/air-sensor/blob/main/photo/002.jpg?raw=true "Фото #2")
 ![Фото #3](https://github.com/andchir/air-sensor/blob/main/photo/003.jpg?raw=true "Фото #3")
