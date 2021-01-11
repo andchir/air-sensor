@@ -21,6 +21,7 @@ Arduino IDE https://www.arduino.cc/en/software
 Как добавить поддержку платы Wemos D1 mini в Arduino IDE: https://gist.github.com/carljdp/e6a3f5a11edea63c2c14312b534f4e53#file-d1-mini-esp8266-md
 
 ![Фото #1](https://github.com/andchir/air-sensor/blob/main/photo/001.jpg?raw=true "Фото #1")
+![Фото #1](https://github.com/andchir/air-sensor/blob/main/photo/005.jpg?raw=true "Фото #5")
 ![Фото #2](https://github.com/andchir/air-sensor/blob/main/photo/002.jpg?raw=true "Фото #2")
 ![Фото #3](https://github.com/andchir/air-sensor/blob/main/photo/003.jpg?raw=true "Фото #3")
 ![Фото #4](https://github.com/andchir/air-sensor/blob/main/photo/004.jpg?raw=true "Фото #4")
