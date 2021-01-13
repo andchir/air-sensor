@@ -16,6 +16,13 @@
 В коде можно включить/выключить отправку данных на https://narodmon.ru/ или Shopker (https://habr.com/ru/post/535158/).
 Для отправки данных на narodmon в параметре ``char apiOwnerName[20] = "username";`` указать имя своего пользователя. GPS координаты прибора можно не указывать, а указать на сайте narodmon.
 
+## Подключение
+
+**PMS5003**  
+TX - D5  
+RX - D6  
+VCC - 5V  
+
 Программы:  
 Arduino IDE https://www.arduino.cc/en/software  
 Как добавить поддержку платы Wemos D1 mini в Arduino IDE: https://gist.github.com/carljdp/e6a3f5a11edea63c2c14312b534f4e53#file-d1-mini-esp8266-md
