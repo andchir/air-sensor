@@ -78,7 +78,7 @@ int valuePm2 = 0;
 int valuePm10 = 0;
 
 // Intervals
-int intervalDisplay = 10000;// 10 seconds
+int intervalDisplay = 5000;// 5 seconds
 int intervalSend = 5 * 60 * 1000;// 5 minutes
 
 // Narodmon.ru settings
