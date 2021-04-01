@@ -42,6 +42,8 @@ boolean connectWIFI = true;
 boolean exportToNarodmon = true;
 boolean exportToShopker = false;
 
+boolean deepSleepEnabled = true;// Enable deep sleep mode. Connect D0 to RST pin.
+
 // AM2320 sensor
 Adafruit_AM2320 am2320 = Adafruit_AM2320();
 
@@ -78,13 +80,16 @@ int valuePm2 = 0;
 int valuePm10 = 0;
 
 // Intervals
-int intervalDisplay = 5000;// 5 seconds
-int intervalSend = 5 * 60 * 1000;// 5 minutes
+int intervalDisplay = 3000;// 3 seconds
+// int intervalSend = 5 * 60 * 1000;// 5 minutes
+// For deep sleep mode:
+int intervalSend = 30 * 1000;// 30 seconds
+int sleepDurationSeconds = 4.5 * 60;// 4 minutes 30 seconds
 
 // Narodmon.ru settings
 char apiUrl[30] = "http://narodmon.ru/json";
 char apiOwnerName[20] = "andchir";
-char apiSensorName[20] = "AirSensor2";
+char apiSensorName[20] = "AirSensor";
 char apiSensorLat[10] = "61.784807";
 char apiSensorLon[10] = "34.346085";
 char apiSensorAlt[5] = "135";
@@ -94,6 +99,7 @@ char shopkerApiUrl[46] = "http://your-domain.com/api/ru/user_content/19";
 char shopkerApiKey[121] = "xxxxxx";
 
 void setup(){
+  timeMillis = 0;
   Serial.begin(9600);
   Serial.println("Initializing");
 
@@ -109,7 +115,10 @@ void setup(){
   
   showTextRectangle("Init", String(ESP.getChipId(), HEX), "", "", "", true);
 
-  if (hasPM) ag.PMS_Init();
+  if (hasPM) {
+    ag.PMS_Init();
+    ag.wakeUp();
+  }
   if (hasSHT) ag.TMP_RH_Init(0x45);
   if (hasDHT) dht.begin();
   if (hasAM2320) am2320.begin();
@@ -239,6 +248,11 @@ void loop(){
       }
       if (exportToShopker) {
         sendDataToShopker(valueTemp, valueHum, valuePm2, valuePm10, valuePr);
+      }
+      if (deepSleepEnabled && !buttonIsEnabled) {
+        Serial.println("Go to deep sleep");
+        if (hasPM) ag.sleep();
+        ESP.deepSleep(sleepDurationSeconds * 1000000);
       }
     }
     timeMillis = 0;
