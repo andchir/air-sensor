@@ -357,6 +357,7 @@ void connectToWifi(){
   wifiManager.setTimeout(120);
   if(!wifiManager.autoConnect((const char*)HOTSPOT.c_str())) {
       Serial.println("failed to connect and hit timeout");
+      // WiFi.disconnect();
       delay(3000);
       ESP.restart();
       delay(5000);
