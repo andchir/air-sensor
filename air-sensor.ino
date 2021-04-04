@@ -115,10 +115,7 @@ void setup(){
   
   showTextRectangle("Init", String(ESP.getChipId(), HEX), "", "", "", true);
 
-  if (hasPM) {
-    ag.PMS_Init();
-    ag.wakeUp();
-  }
+  if (hasPM) ag.PMS_Init();
   if (hasSHT) ag.TMP_RH_Init(0x45);
   if (hasDHT) dht.begin();
   if (hasAM2320) am2320.begin();
@@ -174,10 +171,10 @@ void loop(){
       if (ag.getPM_Data(data)) {
         valuePm2 = data.PM_AE_UG_2_5;
         valuePm10 = data.PM_AE_UG_10_0;
-        if (valuePm2 == 0) valuePm2 = 1;
-        if (valuePm10 == 0) valuePm10 = 1;
       } else {
         Serial.println("Could not read from PM sensor");
+        ag.wakeUp();
+        delay(2000);
         //showTextRectangle("No PM data", "", "", "", "", true);
       }
     }
@@ -254,6 +251,7 @@ void loop(){
       if (deepSleepEnabled && !buttonIsEnabled) {
         Serial.println("Go to deep sleep");
         if (hasPM) ag.sleep();
+        delay(2000);
         ESP.deepSleep(sleepDurationSeconds * 1000000);
       }
     }
