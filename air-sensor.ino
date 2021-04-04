@@ -174,6 +174,8 @@ void loop(){
       if (ag.getPM_Data(data)) {
         valuePm2 = data.PM_AE_UG_2_5;
         valuePm10 = data.PM_AE_UG_10_0;
+        if (valuePm2 == 0) valuePm2 = 1;
+        if (valuePm10 == 0) valuePm10 = 1;
       } else {
         Serial.println("Could not read from PM sensor");
         //showTextRectangle("No PM data", "", "", "", "", true);
