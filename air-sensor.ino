@@ -174,7 +174,7 @@ void loop(){
       } else {
         Serial.println("Could not read from PM sensor");
         ag.wakeUp();
-        delay(2000);
+        delay(10000);// Delay for fan spin-up
         //showTextRectangle("No PM data", "", "", "", "", true);
       }
     }
