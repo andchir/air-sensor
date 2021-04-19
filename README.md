@@ -48,3 +48,5 @@ Arduino IDE https://www.arduino.cc/en/software
 ![Фото #3](https://github.com/andchir/air-sensor/blob/main/photo/003.jpg?raw=true "Фото #3")
 ![Фото #4](https://github.com/andchir/air-sensor/blob/main/photo/004.jpg?raw=true "Фото #4")
 ![Фото #5](https://github.com/andchir/air-sensor/blob/main/photo/006.png?raw=true "Фото #5")
+![Фото #6 - ПДК](https://github.com/andchir/air-sensor/blob/main/photo/pm_pdk.jpg?raw=true "Фото #6 - ПДК")
+
