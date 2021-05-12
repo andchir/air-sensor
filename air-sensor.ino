@@ -122,7 +122,7 @@ void setup(){
   if (hasDS18B20) sensors.begin();
   if (hasBME280) bme.begin(0x76);
   
-  if (connectWIFI) connectToWifi();
+  if (connectWIFI) connectToWifi(digitalRead(buttonPin) == LOW);
   delay(2000);
 }
 
@@ -344,8 +344,8 @@ void showTextRectangle(String ln1, String ln2, String ln3, String ln4, String ln
 }
 
 // Wifi Manager
-void connectToWifi(){
-  Serial.println("WIFI connection...");
+void connectToWifi(bool buttonIsEnabled){
+  Serial.println("WIFI connection..." + String(buttonIsEnabled ? " button pressed" : "button NOT pressed"));
   WiFiManager wifiManager;
   // Custom fields
   WiFiManagerParameter custom_api_server("api_server", "API server", apiUrl, 30);
@@ -357,7 +357,9 @@ void connectToWifi(){
   wifiManager.setTimeout(120);
   if(!wifiManager.autoConnect((const char*)HOTSPOT.c_str())) {
       Serial.println("failed to connect and hit timeout");
-      // WiFi.disconnect();
+      if (buttonIsEnabled) {
+          WiFi.disconnect();
+      }
       delay(3000);
       ESP.restart();
       delay(5000);
