@@ -39,10 +39,11 @@ boolean hasAM2320 = false;
 boolean hasDS18B20 = true;
 boolean hasBME280 = true;
 boolean connectWIFI = true;
-boolean exportToNarodmon = true;
+boolean exportToThingSpeak = true;
+boolean exportToNarodmon = false;
 boolean exportToShopker = false;
 
-boolean deepSleepEnabled = true;// Enable deep sleep mode. Connect D0 to RST pin.
+boolean deepSleepEnabled = false;// Enable deep sleep mode. Connect D0 to RST pin.
 
 // AM2320 sensor
 Adafruit_AM2320 am2320 = Adafruit_AM2320();
@@ -81,22 +82,26 @@ int valuePm10 = 0;
 
 // Intervals
 int intervalDisplay = 3000;// 3 seconds
-// int intervalSend = 5 * 60 * 1000;// 5 minutes
+int intervalSend = 3 * 60 * 1000;// 3 minutes
 // For deep sleep mode:
-int intervalSend = 30 * 1000;// 30 seconds
+// int intervalSend = 30 * 1000;// 30 seconds
 int sleepDurationSeconds = 4.5 * 60;// 4 minutes 30 seconds
 
 // Narodmon.ru settings
 char apiUrl[30] = "http://narodmon.ru/json";
 char apiOwnerName[20] = "andchir";
-char apiSensorName[20] = "AirSensor";
+char apiSensorName[20] = "AirSensor5";
 char apiSensorLat[10] = "61.784807";
 char apiSensorLon[10] = "34.346085";
 char apiSensorAlt[5] = "135";
 
 // Shopker settings
-char shopkerApiUrl[46] = "http://your-domain.com/api/ru/user_content/19";
+char shopkerApiUrl[47] = "http://your-domain.com/api/ru/user_content/19";
 char shopkerApiKey[121] = "xxxxxx";
+
+// ThingSpeak settings
+char thingSpeakApiUrl[39] = "http://api.thingspeak.com/update.json";
+char thingSpeakApiKey[17] = "xxxxxxxxxxxxxxxx";
 
 void setup(){
   timeMillis = 0;
@@ -248,6 +253,9 @@ void loop(){
       if (exportToShopker) {
         sendDataToShopker(valueTemp, valueHum, valuePm2, valuePm10, valuePr);
       }
+      if (exportToThingSpeak) {
+        sendDataToThingSpeak(valueTemp, valueHum, valuePm2, valuePm10, valuePr);
+      }
       if (deepSleepEnabled && !buttonIsEnabled) {
         Serial.println("Go to deep sleep");
         if (hasPM) ag.sleep();
@@ -320,6 +328,33 @@ void sendDataToShopker(float temp, float hum, int pm2, int pm10, float pr) {
   http.end();
 }
 
+void sendDataToThingSpeak(float temp, float hum, int pm2, int pm10, float pr) {
+  Serial.println("API URL: " + String(thingSpeakApiUrl));
+  
+  String jsonString = "{";
+  jsonString += "\"api_key\":\"" + String(thingSpeakApiKey) + "\", ";
+  
+  jsonString += "\"field1\":" + String(temp) + ", ";
+  jsonString += "\"field2\":" + String(hum) + ", ";
+  jsonString += "\"field3\":" + String(pm2) + ", ";
+  jsonString += "\"field4\":" + String(pm10) + ", ";
+  jsonString += "\"field5\":" + String(pr);
+  jsonString += "}";
+
+  Serial.println(jsonString);
+
+  HTTPClient http;
+  http.begin(thingSpeakApiUrl);
+  http.addHeader("Content-Type", "application/json");
+  http.addHeader("Accept", "application/json");
+  http.addHeader("Content-Length", String(jsonString.length()));
+  int httpCode = http.POST(jsonString);
+  String response = http.getString();
+  Serial.println("Response code: " + String(httpCode));
+  Serial.println("Response: " + response);
+  http.end();
+}
+
 // DISPLAY
 void showTextRectangle(String ln1, String ln2, String ln3, String ln4, String ln5, boolean small) {
   //display.clearDisplay();
@@ -348,10 +383,10 @@ void connectToWifi(bool buttonIsEnabled){
   Serial.println("WIFI connection..." + String(buttonIsEnabled ? " button pressed" : "button NOT pressed"));
   WiFiManager wifiManager;
   // Custom fields
-  WiFiManagerParameter custom_api_server("api_server", "API server", apiUrl, 30);
-  WiFiManagerParameter custom_api_owner("api_owner", "API user", apiOwnerName, 30);
-  wifiManager.addParameter(&custom_api_server);
-  wifiManager.addParameter(&custom_api_owner);
+  // WiFiManagerParameter custom_api_server("api_server", "API server", apiUrl, 30);
+  // WiFiManagerParameter custom_api_owner("api_owner", "API user", apiOwnerName, 30);
+  // wifiManager.addParameter(&custom_api_server);
+  // wifiManager.addParameter(&custom_api_owner);
   
   String HOTSPOT = "AIR-SENSOR-" + String(ESP.getChipId(), HEX);
   wifiManager.setTimeout(120);
@@ -367,7 +402,15 @@ void connectToWifi(bool buttonIsEnabled){
     strcpy(apiUrl, custom_api_server.getValue());
     strcpy(apiOwnerName, custom_api_owner.getValue());
     Serial.println("MAC address: " + WiFi.macAddress());
-    Serial.println("API URL: " + String(apiUrl));
-    Serial.println("API user: " + String(apiOwnerName));
+    if (exportToNarodmon) {
+      Serial.println("API URL: " + String(apiUrl));
+      Serial.println("API user: " + String(apiOwnerName));
+    }
+    if (exportToShopker) {
+      Serial.println("API URL: " + String(shopkerApiUrl));
+    }
+    if (exportToThingSpeak) {
+      Serial.println("API URL: " + String(thingSpeakApiUrl));
+    }
   }
 }
