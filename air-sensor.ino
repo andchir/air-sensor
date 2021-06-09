@@ -399,8 +399,8 @@ void connectToWifi(bool buttonIsEnabled){
       ESP.restart();
       delay(5000);
   } else {
-    strcpy(apiUrl, custom_api_server.getValue());
-    strcpy(apiOwnerName, custom_api_owner.getValue());
+    // strcpy(apiUrl, custom_api_server.getValue());
+    // strcpy(apiOwnerName, custom_api_owner.getValue());
     Serial.println("MAC address: " + WiFi.macAddress());
     if (exportToNarodmon) {
       Serial.println("API URL: " + String(apiUrl));
