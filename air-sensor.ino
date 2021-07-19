@@ -85,7 +85,7 @@ int intervalDisplay = 3000;// 3 seconds
 int intervalSend = 3 * 60 * 1000;// 3 minutes
 // For deep sleep mode:
 // int intervalSend = 30 * 1000;// 30 seconds
-int sleepDurationSeconds = 4.5 * 60;// 4 minutes 30 seconds
+int sleepDurationSeconds = 2.5 * 60;// 2 minutes 30 seconds
 
 // Narodmon.ru settings
 char apiUrl[30] = "http://narodmon.ru/json";
