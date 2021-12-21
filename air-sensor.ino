@@ -40,7 +40,7 @@ boolean hasDS18B20 = true;
 boolean hasBME280 = true;
 boolean connectWIFI = true;
 boolean exportToThingSpeak = false;
-boolean exportToSensorCommunity = true;
+boolean exportToSensorCommunity = false;
 boolean exportToNarodmon = false;
 boolean exportToShopker = false;
 
