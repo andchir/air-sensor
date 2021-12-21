@@ -39,7 +39,8 @@ boolean hasAM2320 = false;
 boolean hasDS18B20 = true;
 boolean hasBME280 = true;
 boolean connectWIFI = true;
-boolean exportToThingSpeak = true;
+boolean exportToThingSpeak = false;
+boolean exportToSensorCommunity = true;
 boolean exportToNarodmon = false;
 boolean exportToShopker = false;
 
@@ -87,6 +88,14 @@ int intervalSend = 3 * 60 * 1000;// 3 minutes
 // int intervalSend = 30 * 1000;// 30 seconds
 int sleepDurationSeconds = 2.5 * 60;// 2 minutes 30 seconds
 
+// ThingSpeak settings
+char thingSpeakApiUrl[39] = "http://api.thingspeak.com/update.json";
+char thingSpeakApiKey[17] = "xxxxxxxxxxxxxxxx";
+
+// sensor.community
+char sensorCommunityApiUrl[50] = "http://api.sensor.community/v1/push-sensor-data/";
+char sensorCommunitySensorId[17] = "xxxxxxx-xxxxxxx";
+
 // Narodmon.ru settings
 char apiUrl[30] = "http://narodmon.ru/json";
 char apiOwnerName[20] = "andchir";
@@ -98,10 +107,6 @@ char apiSensorAlt[5] = "135";
 // Shopker settings
 char shopkerApiUrl[47] = "http://your-domain.com/api/ru/user_content/19";
 char shopkerApiKey[121] = "xxxxxx";
-
-// ThingSpeak settings
-char thingSpeakApiUrl[39] = "http://api.thingspeak.com/update.json";
-char thingSpeakApiKey[17] = "xxxxxxxxxxxxxxxx";
 
 void setup(){
   timeMillis = 0;
@@ -256,6 +261,9 @@ void loop(){
       if (exportToThingSpeak) {
         sendDataToThingSpeak(valueTemp, valueHum, valuePm2, valuePm10, valuePr);
       }
+      if (exportToSensorCommunity) {
+        sendDataToSensorCommunity(valueTemp, valueHum, valuePm2, valuePm10, valuePr);
+      }
       if (deepSleepEnabled && !buttonIsEnabled) {
         Serial.println("Go to deep sleep");
         if (hasPM) ag.sleep();
@@ -347,6 +355,32 @@ void sendDataToThingSpeak(float temp, float hum, int pm2, int pm10, float pr) {
   http.begin(thingSpeakApiUrl);
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Accept", "application/json");
+  http.addHeader("Content-Length", String(jsonString.length()));
+  int httpCode = http.POST(jsonString);
+  String response = http.getString();
+  Serial.println("Response code: " + String(httpCode));
+  Serial.println("Response: " + response);
+  http.end();
+}
+
+void sendDataToSensorCommunity(float temp, float hum, int pm2, int pm10, float pr) {
+  Serial.println("API URL: " + String(sensorCommunityApiUrl));
+  
+  String jsonString = "{\"software_version\":\"V2\", ";
+  jsonString += "\"sensordatavalues\":[";
+  jsonString += "{\"value_type\":\"P1\",\"value\":\"" + String(pm2) +  "\"}, ";
+  jsonString += "{\"value_type\":\"P2\",\"value\":\"" + String(pm10) +  "\"}";
+  jsonString += "]}";
+  
+
+  Serial.println(jsonString);
+  
+  HTTPClient http;
+  http.begin(sensorCommunityApiUrl);
+  http.addHeader("Content-Type", "application/json");
+  http.addHeader("Accept", "application/json");
+  http.addHeader("X-Pin", "1");
+  http.addHeader("X-Sensor", String(sensorCommunitySensorId));
   http.addHeader("Content-Length", String(jsonString.length()));
   int httpCode = http.POST(jsonString);
   String response = http.getString();
